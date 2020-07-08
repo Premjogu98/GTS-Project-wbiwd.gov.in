@@ -8,15 +8,18 @@ import Global_var
 from Insert_On_databse import insert_in_Local
 import string
 import ctypes
+import html
 
 
 def Choromedriver():
-    File_Location = open("D:\\0 PYTHON EXE SQL CONNECTION & DRIVER PATH\\wbiwd.gov.in\\Location For Database & Driver.txt" , "r")
-    TXT_File_AllText = File_Location.read()
-    Chromedriver = str(TXT_File_AllText).partition("Driver=")[2].partition("\")")[0].strip()
-    browser = webdriver.Chrome(Chromedriver)
+    # File_Location = open("D:\\0 PYTHON EXE SQL CONNECTION & DRIVER PATH\\wbiwd.gov.in\\Location For Database & Driver.txt" , "r")
+    # TXT_File_AllText = File_Location.read()
+    # Chromedriver = str(TXT_File_AllText).partition("Driver=")[2].partition("\")")[0].strip()
+    # browser = webdriver.Chrome(Chromedriver)
+    browser = webdriver.Chrome(executable_path=str(f"D:\\Translation EXE\\chromedriver.exe"))
     browser.get('https://wbiwd.gov.in/index.php/applications/tenders/')
     browser.maximize_window()
+    time.sleep(2)
     Scraping_data(browser)
 
 
@@ -141,17 +144,11 @@ def Scraping_data(browser):
 
                     SagField[31] = "wbiwd.gov.in"
                     SagField[36] = "45200000"
-                    for Segdata in range(len(SagField)):
-                        print(Segdata , end = ' ')
-                        print(SagField[Segdata])
-                        SagField = [SagField.replace("&quot;" , "\"") for SagField in SagField]
-                        SagField = [SagField.replace("&QUOT;" , "\"") for SagField in SagField]
-                        SagField = [SagField.replace("&nbsp;" , " ") for SagField in SagField]
-                        SagField = [SagField.replace("&NBSP;" , " ") for SagField in SagField]
-                        SagField = [SagField.replace("&amp;amp" , "&") for SagField in SagField]
-                        SagField = [SagField.replace("&AMP;AMP" , "&") for SagField in SagField]
-                        SagField = [SagField.replace("&amp;" , "&") for SagField in SagField]
-                        SagField = [SagField.replace("&AMP;" , "&") for SagField in SagField]
+                    for SegIndex in range(len(SagField)):
+                        print(SegIndex, end=' ')
+                        print(SagField[SegIndex])
+                        SagField[SegIndex] = html.unescape(str(SagField[SegIndex]))
+                        SagField[SegIndex] = str(SagField[SegIndex]).replace("'", "''")
                     Global_var.Total += 1
                     check_date(SagField)
                     print(" Total: " + str(

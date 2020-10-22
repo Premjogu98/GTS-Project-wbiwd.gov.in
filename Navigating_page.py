@@ -32,7 +32,7 @@ def Scraping_data(browser):
                 elements = "https://wbiwd.gov.in/index.php/applications/tenders/"+str(next)+"0"
                 # time.sleep(3)
                 SagField = []
-                for data in range(42):
+                for data in range(45):
                     SagField.append('')
                 for add in range(2, 24, 1):
                     try:
@@ -122,8 +122,8 @@ def Scraping_data(browser):
                         SagField[18] = Details.strip() + "<br>\n""Tender Opening Date: " + Tender_Opening_Date.strip()
                         break
                     SagField[19] = Details.strip()
-                    SagField[20] = "0.0"
-                    SagField[22] = "0.0"
+                    SagField[20] = ""
+                    SagField[22] = ""
 
                     for Tender_Submission_Date in browser.find_elements_by_xpath("/html/body/div[1]/div[5]/div[1]/div/table/tbody/tr[" + str(add) + "]/td[4]"):
                         Tender_Submission_Date = Tender_Submission_Date.get_attribute("innerText")
@@ -138,12 +138,14 @@ def Scraping_data(browser):
                             SagField[24] = ""
                             break
                         break
-                    SagField[26] = "0.0"
+                    SagField[26] = ""
                     SagField[27] = "0"  # Financier
                     SagField[28] = "https://wbiwd.gov.in/index.php/applications/tenders/"
 
                     SagField[31] = "wbiwd.gov.in"
                     SagField[36] = "45200000"
+                    SagField[42] = SagField[7]
+                    SagField[43] = ""
                     for SegIndex in range(len(SagField)):
                         print(SegIndex, end=' ')
                         print(SagField[SegIndex])
@@ -151,13 +153,7 @@ def Scraping_data(browser):
                         SagField[SegIndex] = str(SagField[SegIndex]).replace("'", "''")
                     Global_var.Total += 1
                     check_date(SagField)
-                    print(" Total: " + str(
-                                Global_var.Total) + " Duplicate: " + str(
-                                Global_var.duplicate) + " Expired: " + str(
-                                Global_var.expired) + " Inserted: " + str(
-                                Global_var.inserted) + " Skipped: " + str(
-                                Global_var.skipped) + " Deadline Not given: " + str(
-                                Global_var.deadline_Not_given) + " QC Tenders: " + str(Global_var.QC_Tenders),'\n')
+                    print(" Total: " + str(Global_var.Total) + " Duplicate: " + str(Global_var.duplicate) + " Expired: " + str(Global_var.expired) + " Inserted: " + str(Global_var.inserted) + " Skipped: " + str(Global_var.skipped) + " Deadline Not given: " + str(Global_var.deadline_Not_given) + " QC Tenders: " + str(Global_var.QC_Tenders),'\n')
                     a = 1
                 for next_button in browser.find_elements_by_xpath(elements):
                     next_button.click()
@@ -183,11 +179,9 @@ def check_date(SagField):
                 print("Tender Expired")
                 Global_var.expired += 1
         else:
-            print("l")
             Global_var.skipped += 1
             Global_var.deadline_Not_given += 1
     except Exception as e:
-        # Global_var.Process_End()
         exc_type , exc_obj , exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print("Error ON : " , sys._getframe().f_code.co_name + "--> " + str(e) , "\n" , exc_type , "\n" , fname , "\n" ,
